@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Dashboard</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        font-family: 'Segoe UI', sans-serif;
+        color: #e0e0e0;
+      }
+       h2, h3 {
+        color: #ffffff;
+      }
+      .dashboard-container {
+        margin-top: 40px;
+      }
+      .card, .form-section {
+        background: linear-gradient(145deg, #1e1e1e, #232323);
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        padding: 2rem;
+        margin-bottom: 2rem;
+      }
+      .btn-primary, .btn-custom {
+        background-color: #4a6fa5;
+        border-color: #4a6fa5;
+        color: white;
+      }
+      .btn-primary:hover, .btn-custom:hover {
+        background-color: #3b5e85;
+        border-color: #3b5e85;
+      }
+      table thead {
+        background-color: #4a6fa5;
+        color: white;
+      }
+      table tbody tr {
+        background-color: #2a2a2a;
+      }
+      .form-control {
+        background-color: #2a2a2a;
+        color: #ffffff;
+        border: 1px solid #444;
+      }
+      .form-control[type="file"] {
+        background-color: #1e1e1e;
+        padding: 0.4rem;
+      }
+      img {
+        border-radius: 8px;
+      }
+      a {
+        color: #90caf9;
+      }
+      a:hover {
+        color: #64b5f6;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-xl dashboard-container">
+      <h2 class="mb-4">Hello <span style="color: #5447e0;">{{userData}}</span>, Selamat datang di dashboard admin</h2>
+      <a href="/"><p style="background-color: #dc3545; color: white; padding: 10px 16px; border-radius: 8px; display: inline-block;">
+  Kembali Ke Beranda
+</p></a>
+
+
+       <!-- Skill Form -->
+      <div class="p-4 rounded shadow bg-dark text-white mb-4">
+        <h2>Skill</h2>
+        <form action="/admin/skill" method="post" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label for="skillName" class="form-label">Name</label>
+            <input
+              type="text"
+              name="nameSkill"
+              class="form-control bg-secondary text-white border-0"
+              id="skillName"
+              placeholder="Name Skill"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="skillImage" class="form-label">Upload File</label>
+            <input
+              class="form-control bg-secondary text-white border-0"
+              name="image_skill"
+              type="file"
+              id="skillImage"
+              required
+            />
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+
+      <!-- Skills Table -->
+      <div class="card p-4 mb-5">
+        <h3>Skills</h3>
+        <table class="table table-hover table-bordered align-middle">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name Skill</th>
+              <th>Image</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each resultSkill.rows}}
+              <tr>
+                <td>{{this.id}}</td>
+                <td>{{this.name}}</td>
+                <td><img
+                    src="/assets/uploads/{{this.image_skill}}"
+                    alt="{{this.name}}"
+                    width="60"
+                  /></td>
+                <td>
+                  <a
+                    href="/admin/skill/edit/{{this.id}}"
+                    class="btn btn-sm btn-warning bi bi-pencil-square"
+                  ></a>
+                  <form
+                    action="/admin/skill/delete/{{this.id}}"
+                    method="POST"
+                    style="display:inline-block;"
+                    onsubmit="return confirm('Yakin ingin menghapus skill ini?');"
+                  >
+                    <button
+                      type="submit"
+                      class="btn btn-sm btn-danger bi bi-trash3-fill"
+                    ></button>
+                  </form>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Work Experience Form -->
+      <div class="p-4 rounded shadow bg-dark text-white mb-4">
+        <h2>Work Experience</h2>
+        <form action="/admin/work" method="post" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label for="workName" class="form-label">Work</label>
+            <input
+              type="text"
+              name="work"
+              class="form-control bg-secondary text-white border-0"
+              id="workName"
+              placeholder="Work"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="companyName" class="form-label">Company</label>
+            <input
+              type="text"
+              name="company"
+              class="form-control bg-secondary text-white border-0"
+              id="companyName"
+              placeholder="Company"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Descriptions (List)</label>
+            <input
+              type="text"
+              name="list_one"
+              class="form-control bg-secondary text-white border-0 mb-2"
+              placeholder="List 1"
+              required
+            />
+            <input
+              type="text"
+              name="list_two"
+              class="form-control bg-secondary text-white border-0 mb-2"
+              placeholder="List 2"
+            />
+            <input
+              type="text"
+              name="list_three"
+              class="form-control bg-secondary text-white border-0 mb-2"
+              placeholder="List 3"
+            />
+            <input
+              type="text"
+              name="list_four"
+              class="form-control bg-secondary text-white border-0"
+              placeholder="List 4"
+            />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Tech Stack</label>
+            <input
+              type="text"
+              name="tech_one"
+              class="form-control bg-secondary text-white border-0 mb-2"
+              placeholder="Tech 1"
+              required
+            />
+            <input
+              type="text"
+              name="tech_two"
+              class="form-control bg-secondary text-white border-0 mb-2"
+              placeholder="Tech 2"
+            />
+            <input
+              type="text"
+              name="tech_three"
+              class="form-control bg-secondary text-white border-0 mb-2"
+              placeholder="Tech 3"
+            />
+            <input
+              type="text"
+              name="tech_four"
+              class="form-control bg-secondary text-white border-0"
+              placeholder="Tech 4"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="workImage" class="form-label">Upload File</label>
+            <input
+              class="form-control bg-secondary text-white border-0"
+              name="image_work"
+              type="file"
+              id="workImage"
+              required
+            />
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+
+      <!-- Work Experiences Table -->
+      <div class="card p-4 mb-5">
+        <h3>Work Experiences</h3>
+        <table class="table table-hover table-bordered align-middle">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Work</th>
+              <th>Company</th>
+              <th>Description</th>
+              <th>Tech</th>
+              <th>Image</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each result.rows}}
+              <tr>
+                <td>{{this.id}}</td>
+                <td>{{this.work}}</td>
+                <td>{{this.company}}</td>
+                <td>
+                  <ul>
+                    <li>{{this.list_one}}</li>
+                    <li>{{this.list_two}}</li>
+                    <li>{{this.list_three}}</li>
+                    <li>{{this.list_four}}</li>
+                  </ul>
+                </td>
+                <td>{{this.tech_one}},
+                  {{this.tech_two}},
+                  {{this.tech_three}},
+                  {{this.tech_four}}</td>
+                <td><img
+                    src="/assets/uploads/{{this.image}}"
+                    alt="{{this.work}}"
+                    width="60"
+                  /></td>
+                <td>
+                  <a
+                    href="/admin/work/edit/{{this.id}}"
+                    class="btn btn-sm btn-warning bi bi-pencil-square"
+                  ></a>
+                  <form
+                    action="/admin/work/delete/{{this.id}}"
+                    method="POST"
+                    style="display:inline-block;"
+                    onsubmit="return confirm('Yakin ingin menghapus work experience ini?');"
+                  >
+                    <button
+                      type="submit"
+                      class="btn btn-sm btn-danger bi bi-trash3-fill"
+                    ></button>
+                  </form>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Project Form -->
+      <div class="p-4 rounded shadow bg-dark text-white mb-4">
+        <h2>Project</h2>
+        <form
+          action="/admin/project"
+          method="post"
+          enctype="multipart/form-data"
+        >
+          <div class="mb-3">
+            <label for="projectName" class="form-label">Project Name</label>
+            <input
+              type="text"
+              name="project_name"
+              class="form-control bg-secondary text-white border-0"
+              id="projectName"
+              placeholder="Project Name"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label
+              for="projectDescription"
+              class="form-label"
+            >Description</label>
+            <input
+              type="text"
+              name="description"
+              class="form-control bg-secondary text-white border-0"
+              id="projectDescription"
+              placeholder="Description"
+            />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Tech Stack</label>
+            <input
+              type="text"
+              name="tech1"
+              class="form-control bg-secondary text-white border-0 mb-2"
+              placeholder="Tech 1"
+            />
+            <input
+              type="text"
+              name="tech2"
+              class="form-control bg-secondary text-white border-0 mb-2"
+              placeholder="Tech 2"
+            />
+            <input
+              type="text"
+              name="tech3"
+              class="form-control bg-secondary text-white border-0 mb-2"
+              placeholder="Tech 3"
+            />
+            <input
+              type="text"
+              name="tech4"
+              class="form-control bg-secondary text-white border-0"
+              placeholder="Tech 4"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="projectLink" class="form-label">Link Project</label>
+            <input
+              type="text"
+              name="link_project"
+              class="form-control bg-secondary text-white border-0"
+              id="projectLink"
+              placeholder="Link Project"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="projectImage" class="form-label">Upload File</label>
+            <input
+              class="form-control bg-secondary text-white border-0"
+              name="image_project"
+              type="file"
+              id="projectImage"
+            />
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+
+      <!-- Projects Table -->
+      <div class="card p-4 mb-5">
+        <h3>Projects</h3>
+        <table class="table table-hover table-bordered align-middle">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Project Name</th>
+              <th>Description</th>
+              <th>Tech</th>
+              <th>Link Project</th>
+              <th>Image</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each resultProject.rows}}
+              <tr>
+                <td>{{this.id}}</td>
+                <td>{{this.project_name}}</td>
+                <td>{{this.description}}</td>
+                <td>{{this.tech1}},
+                  {{this.tech2}},
+                  {{this.tech3}},
+                  {{this.tech4}}</td>
+                <td><a
+                    href="{{this.link_project}}"
+                    target="_blank"
+                  >{{this.link_project}}</a></td>
+                <td><img
+                    src="/assets/uploads/{{this.image_project}}"
+                    alt="{{this.project_name}}"
+                    width="60"
+                  /></td>
+                <td>
+                  <a
+                    href="/admin/project/edit/{{this.id}}"
+                    class="btn btn-sm btn-warning bi bi-pencil-square"
+                  ></a>
+                  <form
+                    action="/admin/project/delete/{{this.id}}"
+                    method="POST"
+                    style="display:inline-block;"
+                    onsubmit="return confirm('Yakin ingin menghapus project ini?');"
+                  >
+                    <button
+                      type="submit"
+                      class="btn btn-sm btn-danger bi bi-trash3-fill"
+                    ></button>
+                  </form>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
