@@ -32,7 +32,6 @@ app.use(
 );
 app.use(flash());
 
-// Upload Config
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "./src/assets/uploads");
@@ -120,7 +119,7 @@ async function handleRegister(req, res) {
 
   const hashed = await bcrypt.hash(password, 10);
   await db.query(
-    `INSERT INTO public.user(email, password, name) VALUES ('${email}', '${hashed}', '${name}'`
+    `INSERT INTO public.user(email, password, name) VALUES ('${email}', '${hashed}', '${name}')`
   );
   res.redirect("/login");
 }
@@ -155,10 +154,9 @@ async function handleSkill(req, res) {
     req.flash("error", "Semua field wajib diisi");
     return res.redirect("/admin");
   }
-  await db.query(`INSERT INTO skill (name, image_skill) VALUES ($1, $2)`, [
-    nameSkill,
-    imageSkill,
-  ]);
+  await db.query(
+    `INSERT INTO skill (name, image_skill) VALUES ('${nameSkill}', '${imageSkill}')`
+  );
   res.redirect("/admin");
 }
 
